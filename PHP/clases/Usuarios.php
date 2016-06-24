@@ -80,17 +80,31 @@ class usuario
 
 //--------------------------------------------------------------------------------//
 //--METODO DE CLASE
-	public static function TraerUnUsuario($idParametro) 
+	public static function TraerUnUsuarioXClave($pclave ) 
 	{	
 		$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
 		//$consulta =$objetoAccesoDato->RetornarConsulta("select * from usuario where id =:id");
-		$consulta =$objetoAccesoDato->RetornarConsulta("CALL TraerUnUsuario(:id)");
-		$consulta->bindValue(':id', $idParametro, PDO::PARAM_INT);
+		$consulta =$objetoAccesoDato->RetornarConsulta("CALL TraerUnUsuarioXClave(:pclave)");
+
+			$consulta->bindValue(':pclave', $clave, PDO::PARAM_STR);
 		$consulta->execute();
 		$usuarioBuscada= $consulta->fetchObject('usuario');
 		return $usuarioBuscada;	
 					
 	}
+		public static function TraerUnUsuarioXNombre($nombre ) 
+	{	
+		$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
+		//$consulta =$objetoAccesoDato->RetornarConsulta("select * from usuario where id =:id");
+		$consulta =$objetoAccesoDato->RetornarConsulta("CALL TraerUnUsuarioXClave(:pnombre)");
+		$consulta->bindValue(':pnombre',$nombre, PDO::PARAM_STR);
+		
+		$consulta->execute();
+		$usuarioBuscada= $consulta->fetchObject('usuario');
+		return $usuarioBuscada;	
+					
+	}
+
 	
 	public static function TraerTodosLosUsuarios()
 	{

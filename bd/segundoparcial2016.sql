@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-06-2016 a las 23:38:29
+-- Tiempo de generación: 24-06-2016 a las 02:20:10
 -- Versión del servidor: 5.6.21
 -- Versión de PHP: 5.6.3
 
@@ -19,6 +19,39 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `segundoparcial2016`
 --
+
+DELIMITER $$
+--
+-- Procedimientos
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertarProducto`(IN `pnombre` VARCHAR(50), IN `pporcentaje` INT)
+    NO SQL
+    DETERMINISTIC
+INSERT into misproductos (nombre,porcentaje)
+values
+(pnombre,pporcentaje)$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `TraerTodosLosUsuarios`()
+    NO SQL
+    DETERMINISTIC
+select * from misusuarios$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `traerUnProducto`(IN `pid` INT)
+    NO SQL
+    DETERMINISTIC
+select * from misproductos where id =pid$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `TraerUnUsuarioXClave`(IN `pclave` VARCHAR(50))
+    NO SQL
+    DETERMINISTIC
+select * from misUsuarios where clave = pclave$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `TraerUnUsuarioXNombre`(IN `pnombre` VARCHAR(50))
+    NO SQL
+    DETERMINISTIC
+select * from misusuarios  where nombre =pnombre$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
