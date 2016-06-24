@@ -1,0 +1,53 @@
+  <div class="container">
+		<div class="page-header">
+			<center><h1>SPLab42016</h1> </center>     
+		</div>
+	  	 
+		           
+					<div class="CajaInicio animated bounceInRight">
+							
+							<h1>Listado de usuarios</h1>
+							<!-- id="listausuarios" -->
+								<input type="search" ng-model="q" placeholder="buscar usuario.." aria-label="buscar usuario" />
+							
+								<table class='example-animate-container table table-hover table-responsive' id="listausuarios">
+									<thead>
+										<tr>
+											<th>  foto   </th>				
+											<th>  Nombre     </th>
+											<th>  clave   </th>
+											<th>  tipo        </th>
+											<th>  BORRAR     </th>
+											<th>  MODIFICAR  </th>
+										</tr> 
+									</thead>
+									<tbody>
+										
+									<tr  class="animate-repeat" ng-repeat="usuario in ListadoUsuarios| filter:q as results">
+
+										<td><img  class='fotoGrilla' ng-src="fotos/{{usuario.foto}}" /></td>
+							
+										<td>{{usuario.nombre}}</td>
+										<td>{{usuario.clave}}</td>
+										<td>{{usuario.tipo}}</td>
+
+										<td><button class='btn btn-danger' name='Borrar' ng-click="Borrar(usuario)">   <span class='glyphicon glyphicon-remove-circle'>&nbsp;</span>Borrar</button></td>
+										
+										<td><button class='btn btn-warning' name='Modificar'  ui-sref="modificar({id:usuario.id, nombre:usuario.nombre, clave:usuario.clave, tipo:usuario.tipo, foto:usuario.foto})" ><span class='glyphicon glyphicon-edit'>&nbsp;</span>Modificar</button></td>
+															
+									</tr>
+									<tr class="animate-repeat" ng-if="results.length == 0">
+										<td></td>						
+										<td> <strong>no hay usuarios con ese dato...</strong></td>
+										<td></td>
+										<td></td>
+										<td></td>										
+										<td></td>								     
+								    </tr>
+									
+								    <tbody>
+								</table>
+							</div>
+														
+						</div>
+		</div>

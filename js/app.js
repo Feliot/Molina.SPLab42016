@@ -6,8 +6,8 @@ var app = angular.module('ABMangularPHP', ['ngAnimate','ui.router','angularFileU
 .config(function($stateProvider, $urlRouterProvider,$authProvider) {
 
   
-  $authProvider.loginUrl = 'Angular_PHP_ABM_Persona-ngrepeat/PHP/clases/autentificador.php';
-  $authProvider.signupUrl = 'Angular_PHP_ABM_Persona-ngrepeat/PHP/clases/autentificador.php';
+  $authProvider.loginUrl = 'Molina.SPLab42016/PHP/clases/autentificador.php';
+  $authProvider.signupUrl = 'Molina.SPLab42016/PHP/clases/autentificador.php';
   $authProvider.tokenName = 'mytoken2016';
   $authProvider.tokenPrefix = 'ABM_Persona';
   $authProvider.authHeader = 'Data';
@@ -33,17 +33,17 @@ var app = angular.module('ABMangularPHP', ['ngAnimate','ui.router','angularFileU
     }, url: '/login'
     })
 ///{nombre}?:password
-.state('grilla', {
-    url: '/grilla',
+.state('grillausuario', {
+    url: '/grillausuario',
     views: {
-      'principal': { templateUrl: 'template/templateGrilla.html',controller: 'controlGrilla' },
+      'principal': { templateUrl: 'template/templateGrillaUsuario.html',controller: 'controlGrillaUsuario' },
       'menuSuperior': {templateUrl: 'template/menuSuperior.html'}
     }
   })
-.state('grillaFiltro', {
-    url: '/grillaFiltro',
+.state('grillausuarioFiltro', {
+    url: '/grillausuarioFiltro',
     views: {
-      'principal': { templateUrl: 'template/templateGrillaFiltro.html',controller: 'controlGrillaFiltro'} ,
+      'principal': { templateUrl: 'template/templategrillaUsuarioFiltro.html',controller: 'controlgrillaUsuarioFiltro'} ,
       'menuSuperior': {templateUrl: 'template/menuSuperior.html'} }    
   })
 .state('alta', {
@@ -78,11 +78,30 @@ app.controller('controlLoguin', function($scope, $http, $auth, $state, $statePar
   // var mail = $stateParams.mail;
    // var nombre = $stateParams.nombre;
    // var pass = $stateParams.password;
+$scope.usuario={};
+$scope.CargarAdmin=function() {
+$scope.usuario.nombre = "admin";
+$scope.usuario.correo = "admin@admin.com";
+$scope.usuario.clave = "321";
+};
+$scope.CargarComprador=function() {
+  $scope.usuario.nombre = "comprador";
+  $scope.usuario.correo = "comp@comp.com";
+  $scope.usuario.clave = "123";
 
-   $scope.logear=function(pass , nombre) {
+};
+$scope.CargarVendedor=function() {
+  $scope.usuario.nombre = "vendedor";
+  $scope.usuario.correo = "vend@vend.com";
+  $scope.usuario.clave = "321";
 
-     console.info("respuesta del loguin1", pass , nombre);
-      $auth.login({usuario:nombre,clave:pass})
+};
+
+
+   $scope.logear=function(pass , nombre, correo) {
+
+     console.info("respuesta del loguin1", pass , nombre, correo);
+      $auth.login({usuario:nombre,clave:pass, correo: correo})
       .then(function(respuestadeauth){
       console.info("respuesta del loguin",respuestadeauth);
       console.info("respuesta del loguinasda",$auth.isAuthenticated());
@@ -125,18 +144,6 @@ $scope.DatoInicio="Cargame";
       }
 else{
   }//Fin else
- /*if($auth.isAuthenticated())
-  {
-    $state.go('alta');
-  }
-  else
-    {
-      $state.go('menu');
-    }
-
-  $auth.login({usuario:"pepito",clave:"666"});
-  $scope.DatoTest="**Menu**";
-  console.info("datos auth en menu", $auth.isAuthenticated(),$auth.getPayload());*/
 });
 
 
@@ -154,13 +161,13 @@ app.controller('controlAlta', function($scope, $http ,$state,$auth,FileUploader,
   $scope.DatoTest="**alta**";
 //inicio las variables
 
-  $scope.persona={};
-  $scope.persona.nombre= "natalia" ;
-  $scope.persona.dni= "12312312" ;
-  $scope.persona.apellido= "natalia" ;
-  $scope.persona.foto="pordefecto.png";
+  $scope.usuario={};
+  $scope.usuario.nombre= "natalia" ;
+  $scope.usuario.correo= "asdasd@asdasd" ;
+  $scope.usuario.clave= "natalia" ;
+  $scope.usuario.foto="pordefecto.png";
   
-  cargadoDeFoto.CargarFoto($scope.persona.foto,$scope.uploader);
+  cargadoDeFoto.CargarFoto($scope.usuario.foto,$scope.uploader);
  
  
  $scope.Mje=function(){
@@ -188,7 +195,7 @@ app.controller('controlAlta', function($scope, $http ,$state,$auth,FileUploader,
         .then(function(respuesta) {       
            //aca se ejetuca si retorno sin errores        
          console.log(respuesta.data);
-         $state.go("grilla");
+         $state.go("grillausuario");
 
       },function errorCallback(response) {        
           //aca se ejecuta cuando hay errores
@@ -200,20 +207,20 @@ app.controller('controlAlta', function($scope, $http ,$state,$auth,FileUploader,
  });
 
 
-app.controller('controlGrilla', function($scope, $http,$location,$state,$auth,factoryPersona) {
-  	$scope.DatoTest="**grilla**";
+app.controller('controlGrillaUsuario', function($scope, $http,$location,$state,$auth,factoryUsuario) {
+  	//$scope.DatoTest="**grillausuario**";
  if(!$auth.isAuthenticated())
       {
-        console.log("Validacion en GRILLA INCORRECTA");
+        console.log("Validacion en grillausuario INCORRECTA");
         $state.go('login');
       }
 else{
-console.log(factoryPersona.nombre);
+console.log(factoryUsuario.nombre);
 //factoryPersona.mostrarNombre("Molina");
- factoryPersona.TraerListado().then(function(carga){
-  $scope.ListadoPersonas=  carga;
+ factoryUsuario.TraerListado().then(function(carga){
+  $scope.ListadoUsuarios=  carga;
 });
-console.log(factoryPersona.nombre);
+console.log(factoryUsuario.nombre);
 $scope.guardar = function(persona){
 console.log( JSON.stringify(persona));
 }
@@ -255,10 +262,10 @@ console.log( JSON.stringify(persona));
               console.log( response);           
       });
  	}// $scope.Borrar
-});//app.controller('controlGrilla',
+});//app.controller('controlgrillausuario',
 
-app.controller('controlGrillaFiltro', function($scope, $http,$location,$state,cienDatos) {
-    $scope.DatoTest="**grillaFiltro**";
+app.controller('controlGrillaUsuarioFiltro', function($scope, $http,$location,$state,cienDatos) {
+   // $scope.DatoTest="**grillaUsuarioFiltro**";
 console.info(cienDatos);
 $scope.ListadoPersonas= cienDatos;
 $scope.filtraraPorMoneda= function(valoractual, valoresperado, tercerparametro){
@@ -272,7 +279,7 @@ $scope.filtraraPorMoneda= function(valoractual, valoresperado, tercerparametro){
   return false;}
 };//fin filtrarPorMoneda
 
-});//app.controller('controlGrillaFiltro',
+});//app.controller('controlgrillausuarioFiltro',
 
 
 app.controller('controlModificacion', function($scope, $http, $state, $stateParams, FileUploader)//, $routeParams, $location)
@@ -308,12 +315,12 @@ app.controller('controlModificacion', function($scope, $http, $state, $statePara
 
   $scope.uploader.onSuccessItem=function(item, response, status, headers)
   {
-    $http.post('PHP/nexo.php', { datos: {accion :"modificar",persona:$scope.persona}})
+    $http.post('PHP/nexo.php', { datos: {accion :"modificar",Usuario:$scope.Usuario}})
         .then(function(respuesta) 
         {
           //aca se ejetuca si retorno sin errores       
           console.log(respuesta.data);
-          $state.go("grilla");
+          $state.go("grillausuario");
         },
         function errorCallback(response)
         {
@@ -324,12 +331,12 @@ app.controller('controlModificacion', function($scope, $http, $state, $statePara
   };
 
 
-  $scope.Guardar=function(persona)
+  $scope.Guardar=function(Usuario)
   {
     if($scope.uploader.queue[0].file.name!='pordefecto.png')
     {
       var nombreFoto = $scope.uploader.queue[0]._file.name;
-      $scope.persona.foto=nombreFoto;
+      $scope.Usuario.foto=nombreFoto;
     }
     $scope.uploader.uploadAll();
   }
@@ -352,32 +359,32 @@ app.service('cargadoDeFoto',function($http,FileUploader){
          });
     }
 });//app.service('cargadoDeFoto',function($http,FileUploader){
- app.factory("factoryPersona",function(servicioUsuario){
-  var persona = {nombre:"German",
-   // servicioUsuario.retornarPersona(),
+ app.factory("factoryUsuario",function(servicioUsuario){
+  var usuario = {nombre:"German",
+   // servicioUsuario.retornarUsuario(),
     mostrarNombre:function(dato)
     {  this.nombre= dato;
-      servicioUsuario.retornarPersona().then(function(respuesta){
+      servicioUsuario.retornarUsuario().then(function(respuesta){
         console.log(respuesta);
       })
       //console.log("este es mi nombre "+dato)
       }//fin de mostrarNombre
    , TraerListado:  function(){ 
-     return servicioUsuario.retornarPersona().then(function(respuesta){
+     return servicioUsuario.retornarUsuario().then(function(respuesta){
         console.log(respuesta);
         return respuesta ;
       })
       //console.log("este es mi nombre "+dato)
       }//fin de TraerListado
   };
-  return persona;
+  return usuario;
  }); 
  app.service('servicioUsuario',function($http){ 
   //var lista= {
-  this.retornarPersona=function(){
+  this.retornarUsuario=function(){
       //var listado = "GermanMolina";
      // return listado;
-    return  $http.get('/Angular_PHP_ABM_Persona-ngrepeat/Datos/Persona')// el nombre completo de la pagina
+    return  $http.get('/Molina.SPLab42016/Datos/Usuario')// el nombre completo de la pagina
     .then(function(respuesta) {       
          return  respuesta.data;
          //console.log(respuesta.data);
@@ -396,7 +403,7 @@ app.service('servicioMjePost',function($http){
   this.retornarMje=function(){
       //var listado = "GermanMolina";
      // return listado;
-    return  $http.post('/Angular_PHP_ABM_Persona-ngrepeat/Datos/',{uno: 1, fruta: "manzana"})// el nombre completo de la pagina
+    return  $http.post('/Molina.SPLab42016/Datos/',{uno: 1, fruta: "manzana"})// el nombre completo de la pagina
     .then(function(respuesta) {       
          return  respuesta.data;
          //console.log(respuesta.data);

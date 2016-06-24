@@ -1,6 +1,7 @@
 <?php 
 
 include "clases/Productos.php";
+include "clases/Usuarios.php";
 // $_GET['accion'];
 
 
@@ -38,7 +39,7 @@ else{
 
 		switch($respuesta->datos->accion)
 		{
-			case "borrar":	
+			case "borrar_producto":	
 				if($respuesta->datos->producto->foto!="pordefecto.png")
 				{
 					unlink("../fotos/".$respuesta->datos->producto->foto);
@@ -46,20 +47,27 @@ else{
 				producto::Borrarproducto($respuesta->datos->producto->id);
 			break;
 
-			case "insertar":	
-				if($respuesta->datos->producto->foto!="pordefecto.png")
+			case "insertar_producto":	
+				producto::Insertarproducto($respuesta->datos->producto);
+			break;
+			case "insertar_usuario":	
+				if($respuesta->datos->usuario->foto!="pordefecto.png")
 				{
 					$rutaVieja="../fotos/".$respuesta->datos->producto->foto;
 					$rutaNueva=$respuesta->datos->producto->dni.".".PATHINFO($rutaVieja, PATHINFO_EXTENSION);
 					copy($rutaVieja, "../fotos/".$rutaNueva);
 					unlink($rutaVieja);
-					$respuesta->datos->producto->foto=$rutaNueva;
+					$respuesta->datos->usuario->foto=$rutaNueva;
 				}
-				producto::Insertarproducto($respuesta->datos->producto);
+				producto::InsertarUsuario($respuesta->datos->usuario);
 			break;
 
-			case "buscar":
+			case "buscar_producto":
 			
+				echo json_encode(producto::TraerUnaproducto($respuesta->datos->id));
+				break;
+
+			case "buscar_usuario":
 				echo json_encode(producto::TraerUnaproducto($respuesta->datos->id));
 				break;
 	

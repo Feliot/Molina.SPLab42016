@@ -8,7 +8,8 @@
  */
 require '../vendor/autoload.php';
 require '../PHP/clases/AccesoDatos.php';
-require '../PHP/clases/Personas.php';
+require '../PHP/clases/Productos.php';
+require '../PHP/clases/Usuarios.php';
 /**
  * Step 2: Instantiate a Slim application
  *
@@ -31,21 +32,24 @@ $app->get('/', function ($request, $response, $args) {
     $response->write("Welcome to Slim!");
     return $response;
 });
-$app->post('/', function ($request, $response, $args) {
-    $response->write("Welcome to Slim! post");
-    return $response;
-});
 
 $app->get('/hello[/{name}]', function ($request, $response, $args) {
     $response->write("Hello, " . $args['name']);
     return $response;
 })->setArgument('name', 'World!');
 
-$app->get('/Persona[/]', function ($request, $response, $args) {
-	$listado=Persona::TraerTodasLasPersonas();
+$app->get('/Usuario[/]', function ($request, $response, $args) {
+	$listado=Usuario::TraerTodosLosUsuarios();
     $response->write(json_encode($listado));
     return $response;
 });
+
+$app->get('/Producto[/]', function ($request, $response, $args) {
+	$listado=Producto::TraerTodosLosProductos();
+    $response->write(json_encode($listado));
+    return $response;
+});
+
 /*
  * Step 4: Run the Slim application
  *
